@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다함께 캡챠챠</title>
+    <style>
+        /* 기본적인 스타일 초기화 */
+        body, h1, p {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f3f3f3;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            margin: 0;
+        }
+
+        /* 보라색 테마 적용 */
+        h1 {
+            color: #57108e;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 30%;
+        }
+
+        #upload-form {
+            background-color: #7125ab;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            background-color: #f3f3f3;
+            color: #333;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #7c33bd;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #9c4bdb;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #9c4bdb;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>캡챠 헬퍼</h1>
+        <form id="upload-form" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required />
+            <button type="submit">분석</button>
+        </form>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const result = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                result.textContent = `분석 결과 : ${data.prediction}`;
+            } else {
+                const errorData = await response.json();
+                result.textContent = `Error: ${errorData.error}`;
+            }
+        });
+    </script>
+</body>
+</html>
